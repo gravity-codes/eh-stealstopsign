@@ -1,13 +1,32 @@
 local stopsign
 local closestObj
 
+exports['qb-target']:AddTargetModel('prop_sign_road_01a', {
+    options = {
+        {
+            type = "client",
+            event = "stopsign:stealStopsign",
+            icon = 'fa-regular fa-circle-stop',
+            label = 'Steal the stop sign',
+            targeticon = 'fas fa-example',
+            canInteract = function(entity, distance, data)
+                IsEntityUpright(entity, 45.0)
+            end
+        }
+    },
+    distance = 5.0,
+})
+
 exports["rz-interact"]:AddPeekEntryByModel(GetHashKey('prop_sign_road_01a'),
-    {{
+    { {
         event = "stopsign:stealStopsign",
         id = "stealstopsign",
         icon = "stop-circle",
         label = "Steal the stop sign"
-    }}, {distance = {radius = 3.5}, isEnabled = function() return IsEntityUpright(GetClosestObjectOfType(GetEntityCoords(PlayerPedId()), 5.0, GetHashKey('prop_sign_road_01a'), false, false, false), 45.0) end})
+    } },
+    { distance = { radius = 3.5 }, isEnabled = function() return IsEntityUpright(
+        GetClosestObjectOfType(GetEntityCoords(PlayerPedId()), 5.0, GetHashKey('prop_sign_road_01a'), false, false, false),
+            45.0) end })
 
 RegisterNetEvent('stopsign:stealStopsign', function()
     local playerCoords = GetEntityCoords(PlayerPedId())
@@ -15,9 +34,11 @@ RegisterNetEvent('stopsign:stealStopsign', function()
 
     loadAnimDict("amb@world_human_janitor@male@base")
     TaskPlayAnim(PlayerPedId(), "amb@world_human_janitor@male@base", "base", 5.0, -1, -1, 50, 0, false, false, false)
-    stopsign = CreateObject(GetHashKey('prop_sign_road_01a'), playerCoords.x, playerCoords.y, playerCoords.z, true, false, false)
+    stopsign = CreateObject(GetHashKey('prop_sign_road_01a'), playerCoords.x, playerCoords.y, playerCoords.z, true, false,
+        false)
     SetEntityAsMissionEntity(stopsign, true, true)
-    AttachEntityToEntity(stopsign, PlayerPedId(),GetPedBoneIndex(GetPlayerPed(PlayerId()), 28422), -0.005, 0.0, 0.0, 360.0, 360.0, 115.0, 1, 1, 0, 1, 0, 1)
+    AttachEntityToEntity(stopsign, PlayerPedId(), GetPedBoneIndex(GetPlayerPed(PlayerId()), 28422), -0.005, 0.0, 0.0,
+        360.0, 360.0, 115.0, 1, 1, 0, 1, 0, 1)
 
     if DoesEntityExist(closestObj) then
         NetworkRequestControlOfEntity(closestObj)
@@ -57,7 +78,7 @@ RegisterNetEvent('stopsign:dropStopsign', function(source)
 end)
 
 function loadAnimDict(dict)
-    while not HasAnimDictLoaded( dict ) do
+    while not HasAnimDictLoaded(dict) do
         RequestAnimDict(dict)
         Citizen.Wait(5)
     end
