@@ -17,17 +17,6 @@ exports['qb-target']:AddTargetModel('prop_sign_road_01a', {
     distance = 5.0,
 })
 
-exports["rz-interact"]:AddPeekEntryByModel(GetHashKey('prop_sign_road_01a'),
-    { {
-        event = "stopsign:stealStopsign",
-        id = "stealstopsign",
-        icon = "stop-circle",
-        label = "Steal the stop sign"
-    } },
-    { distance = { radius = 3.5 }, isEnabled = function() return IsEntityUpright(
-        GetClosestObjectOfType(GetEntityCoords(PlayerPedId()), 5.0, GetHashKey('prop_sign_road_01a'), false, false, false),
-            45.0) end })
-
 RegisterNetEvent('stopsign:stealStopsign', function()
     local playerCoords = GetEntityCoords(PlayerPedId())
     closestObj = GetClosestObjectOfType(playerCoords, 5.0, GetHashKey('prop_sign_road_01a'), false, false, false)
